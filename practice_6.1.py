@@ -1,5 +1,5 @@
 import csv
-
+import math
 
 def find_alice(filename):
     """
@@ -39,9 +39,29 @@ def calculate_average (record, start_col, count):
     Assignment 6.1 for more details.
     """
     sum = 0
+    
+    count = int(count) 
     for index in range (start_col, start_col + count):
-        sum += int (record [index])
-    average = sum / count
+        number = record [index]
+        try:
+            sum += int (number)
+        except ValueError:
+            try:
+                number = float(number)
+            except ValueError:
+                number = 0
+
+            number = round(number)
+
+            sum += (number)
+        
+        sum = int(sum)
+
+    try:
+        average = sum / count
+    except ZeroDivisionError:
+        return 0
+    average = float(round(average,2))
 
     return average
 
@@ -55,12 +75,27 @@ def deans_list (filename, min_grade):
 
     See Assignment 6.1 for requirement details.
     """
-
+    with open(filename) as user_file:
+        csv_reader = csv.reader(user_file)
+        next(csv_reader)
+        
+        for record in csv_reader:
+            print(record[0])
+            i = 3
+            #min_grade = float(min_grade)
+            while i < 30:
+                try:
+                    record[i] = float(record[i])
+                except ValueError:
+                    record[i] = 0
+                if record[i] > min_grade :  
+                    print(record[i],sep = " ")
+                i+=1
 
 def main ():
     # Simple find_alice test
     #find_alice("data/alice.txt")
-    print ("Found Alice", find_alice ("data/alice.txt"), "times.")
+    #print ("Found Alice", find_alice ("data/alice.txt"), "times.")
     # Sample records that can be used to test calculate_avearge
     #clean_record = 'Student,80,68,75,81,85,93'.split (',')
     #dirty_record = 'Student,80,97.8,75,,85.4,a'.split (',')
@@ -70,7 +105,7 @@ def main ():
     #print (calculate_average (dirty_record, 1, 6)) # 56.3333333333
 
     # Test for deans_list
-    #deans_list ("data/full_grades_999.csv", 89)
+    deans_list ("data/full_grades_999.csv", 89)
 
 if __name__ == "__main__":
     main ()
