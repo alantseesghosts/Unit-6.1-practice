@@ -76,22 +76,35 @@ def deans_list (filename, min_grade):
     See Assignment 6.1 for requirement details.
     """
     with open(filename) as user_file:
-        csv_reader = csv.reader(user_file)
-        next(csv_reader)
-        
-        for record in csv_reader:
-            print(record[0])
-            i = 3
-            #min_grade = float(min_grade)
-            while i < 30:
-                try:
-                    record[i] = float(record[i])
-                except ValueError:
-                    record[i] = 0
-                if record[i] > min_grade :  
-                    print(record[i],sep = " ")
-                i+=1
+         csv_reader = csv.reader(user_file)
+         next(csv_reader)
 
+         for record in csv_reader:
+             #print(record[0])
+             i = 3
+             sum = 0
+             count = 0
+             #min_grade = float(min_grade)
+             while i < 30:
+                try:
+                     record[i] = float(record[i])
+                except ValueError:
+                     record[i] = 0
+                
+                count +=1
+                sum+=record[i]
+
+
+                average = sum /count
+                average = round(average, 2)
+                i+=1
+            
+             #print(average)
+     
+             if average > min_grade :
+                 print(record[0],"=", average)  
+                #print(record[i],sep = " ")
+                
 def main ():
     # Simple find_alice test
     #find_alice("data/alice.txt")
@@ -105,7 +118,7 @@ def main ():
     #print (calculate_average (dirty_record, 1, 6)) # 56.3333333333
 
     # Test for deans_list
-    deans_list ("data/full_grades_999.csv", 89)
+    deans_list ("data/full_grades_999.csv", 75)
 
 if __name__ == "__main__":
     main ()
